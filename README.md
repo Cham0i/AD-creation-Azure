@@ -1,18 +1,25 @@
-# AD-creation-Azure
-Creating a Domain Controller and Client VM within Azure to simulate Active Directory set up
+<h1>Active Directory Simulation Creation in Azure</h1>
+Hello. This is a tutorial on how to use Microsoft Azure to simulate Active Directory using 2 Virtual Machines. This is usefull if you want to test implementations to a dummy domain before they are hosted on the real deal. Its also usefull if you want to know how your school laptop works :)
 
-Hello. This is a tutorial on how to use Microsoft Azure to simulate Active Directory using 2 Virtual Machines
+<h2>Azure set up</h2>
+First thing you need to do is go to https://portal.azure.com Create an account for Azure if you don't have one (keep in mind only the first $200 worth of service is free). 
 
-First thing you need to do is go to https://portal.azure.com
-Create and account for Azure if you don't have one (keep in mind only the first $200 worth of service is free).
+![alt text](https://i.imgur.com/d4lzdkz.png)
 
-A subscription in Azure is linked to a payment option and can contain multiple resource groups. For our simulation we will only need 1 subscription and 1 resource group under that subscription
-
+A subscription in Azure is linked to a payment option and can contain multiple resource groups. For our simulation we will only need 1 subscription
+![alt text](https://i.imgur.com/FsU2GSi.png)
+and 1 resource group under that subscription
+![alt text](https://i.imgur.com/CpRDDBk.png)
 We will then need to create 2 virtual machines
 
-The first one will be our Domain Controller
-  The domain controller is the computer that will host active directory and it will have all the accounts that other computers withing the domain will be able to access
-  
+<h2>Virtual Machines</h2>
+<p>The first one will be our Domain Controller. The domain controller is the computer that will host active directory and it will have all the accounts that other computers within the domain will be able to access</p>
+Important things to note while making the virtual machines
+1) Both VMs must be under the same subscription, resource group, and region
+2) 
+![alt text](https://i.imgur.com/NVpaIS8.png)
+something
+![alt text](https://i.imgur.com/se5fXfw.png)
   The NIC will need to be static, because if it is dynamic the domain controller might change addresses which will leave the client computers unable to connect to the domain controller
   
   
