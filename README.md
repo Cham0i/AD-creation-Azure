@@ -57,7 +57,7 @@ Since we are making a brand new domain we will select the "Add a new forest" opt
 
 ![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/nine.png)
 
-At this point you can ignore everything else in the software wizard. Once you get to the end and start installing, you might loose connection to the VM as it restarts (or prompts you to restart) in order for the changes to take effect. A RDP back into the VM **might** require using the domain admin username  (DomainName.com\Original_VMs_Username or Original_VMs_Username@DomainName.com) instead of the original VM's username. The next section will have screenshot examples of this.
+At this point you can ignore everything else in the software wizard (just provide a password for DSRM). Once you get to the end and start installing, you might loose connection to the VM as it restarts (or prompts you to restart) in order for the changes to take effect. A RDP back into the VM **might** require using the domain admin username  (DomainName.com\Original_VMs_Username or Original_VMs_Username@DomainName.com) instead of the original VM's username. The next section will have screenshot examples of this.
 
 ![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/ten.png)
 
@@ -72,10 +72,15 @@ Just like that, we should have Active Directory installed. Now what is left is t
 3-Find our domain within the ClientVM and use our admin credentials to add the VM to our domain, then allowing other users to RDP into ClientVM.
  
 ### 1. Account/User Creation Process
- 
- add pic to find 11.png
+
+![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/Screenshot_20230311_164859.png)
+
 ![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/11.png)
+
+![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/Screenshot_20230311_175702.png)
 Add user (preferably under a new file thingy)
+
+
 ![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/12.png)
 make user into admin
 
@@ -104,6 +109,8 @@ If you are successfull you will be greeted with this:
 
 add stuff about allowing all users to RDP
 and the following is shown
+
+![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/Screenshot_20230311_173905.png)
 
 ![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/21.png)
 
