@@ -28,7 +28,10 @@ The second one will be our Client
   Time to install Active Directory services
   
   Login to DC and install Active Directory Services
-  Promote to DC and name the domain
+  
+  Promote to DC and name the domain.com
+  its common that the pc will restart and kick you from RDP 
+  
  Restart and re log in with domain.com/admin
  
  Create an admin
