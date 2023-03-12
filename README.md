@@ -16,7 +16,7 @@ Important things to note while making the VMs (Virtual Machines):
 
 1. Both VMs must be under the same subscription, resource group, and region. This should put both VMs in the same VNet (Virtual Network, think of it as LAN). The option to choose a VNet during creation is under "Networking".
 
-If you want to be sure you did this right, use **NetworkWatcher>Monitoring>Topography** after creating both VMs to verify they are in the same VNet. If you want to be extra sure, you can even try to ping DC from Client; but make sure the DC has ICMP traffic allowed under **VirtualMachines>[your DC name here]>Settings>Networking**. You can use Add Inbound Porting Rule to add ICMP under "Protocol"
+ If you want to be sure you did this right, use **NetworkWatcher>Monitoring>Topography** after creating both VMs to verify they are in the same VNet. If you want to be extra sure, you can even try to ping DC from Client; but make sure the DC has ICMP traffic allowed under **VirtualMachines>[your DC name here]>Settings>Networking**. You can use Add Inbound Porting Rule to add ICMP under "Protocol"
 
 2.The image for the DC must be Windows Server. The client may have regular Windows (and it's more realistic if it does), but for this example, my client computer was also a Windows Server.
 
@@ -61,18 +61,52 @@ At this point you can ignore everything else in the software wizard. Once you ge
 
 ![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/ten.png)
 
- ## Active Directory Configuration
+## Active Directory Configuration
  
- Just like that, we should have Active Directory installed. Now what is left is to add our Client VM to our domain. To do this we are going to:
+Just like that, we should have Active Directory installed. Now what is left is to add our Client VM to our domain. To do this we are going to:
 
 1-Add an admin account within our DC (and demonstrate how to add other users)
+
 2-Change the ClientVM NIC to use our DC as a DNS server within Azure
+
 3-Find our domain within the ClientVM and use our admin credentials to add the VM to our domain, then allowing other users to RDP into ClientVM.
  
- ### 1. Account/User Creation Process
+### 1. Account/User Creation Process
  
+ add pic to find 11.png
+![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/11.png)
+Add user (preferably under a new file thingy)
+![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/12.png)
+make user into admin
+
+
+we make another user named joe under student thingy
+
+![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/20.png)
  
  ### 2. DNS Set-up
  
+Remember how to get to the NIC? Well this time we will go to the Client's NIC. Under **Settings>DNS Server** we will select "Custom" and insert our DC's "NIC Private IP" found under **Virtual Machines>[your DC name here]>Networking
+
+![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/15.png)
  
  ### 3. Adding Client Computers to Domain
+ 
+Lastly, we will RDP into our Client VM using the credentials used during creation. Then we will go to **settings>System>About>
+
+Under "Member of" select "Domain" and enter your domain's name. It will ask you to login, for which the credentials will be for any admin account (the one we made under 1. Account/User Creation Process).
+
+![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/19.png)
+
+If you are successfull you will be greeted with this:
+
+![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/16.png)
+
+add stuff about allowing all users to RDP
+and the following is shown
+
+![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/21.png)
+
+![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/22.png)
+
+![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/23.png)
