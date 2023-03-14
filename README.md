@@ -115,8 +115,26 @@ If you are successfull you will be greeted with this:
 
 ![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/16.png)
 
+If you were to RDP back into DC and look at "Active Directory Users and Computers" you would find your Client VM listed there.
+
+![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/Screenshot_20230311_174956.png)
+
+One small problem, only Domain Admins will be allowed to RDP into our Client VM. To enable all Domain Users RDP access we need to go to **Settings>System>Remote Desktop>User Accounts>select users that can remotely access this PC** 
+
+![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/Screenshot_20230311_175430.png)
+
+It's the exact thing we did when we added our admin user into "Domain Admins" group, except for the group we add "Domain Users".
+
+![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/Screenshot_20230311_175529.png)
+
+### Double Checking Our Simulation
+
+Moment of truth; if we did everything right we should be able to RDP into our Client VM using our non-admin user credentials.
+
 ![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/21.png)
 
 ![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/22.png)
 
 ![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/23.png)
+
+Enjoy your brand new Active Directory Domain Service simulated enviroment :)
