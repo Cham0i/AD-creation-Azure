@@ -18,7 +18,7 @@ Important things to note while making the VMs (Virtual Machines):
 
  If you want to be sure you did this right, use **NetworkWatcher>Monitoring>Topography** after creating both VMs to verify they are in the same VNet. If you want to be extra sure, you can even try to ping DC from Client; but make sure the DC has ICMP traffic allowed under **VirtualMachines>[your DC name here]>Settings>Networking**. You can use Add Inbound Porting Rule to add ICMP under "Protocol"
 
-2.The image for the DC must be Windows Server. The client may have regular Windows (and it's more realistic if it does), but for this example, my client computer was also a Windows Server.
+2. The image for the DC must be Windows Server. The client may have regular Windows (and it's more realistic if it does; I, however, used a server image for both VMs).
 
 3. Use the recommended "hardware" Size (technically not hard since its virtual). Using 1 VCPU and 1GB of memory will not be enough to even allow a RDP (Remote Desktop Protocol) connection.
 
@@ -27,7 +27,7 @@ Important things to note while making the VMs (Virtual Machines):
 
 ## Installing Active Directory Domain Service
 
-For the DC, the NIC (Network Interface Card) will need to be static. If it is set to dynamic the domain controller might change addresses which will leave the client computer attempting to connect to DC using the wrong address.
+For the DC, the NIC (Network Interface Card) will need to be static. If it is set to dynamic the domain controller might change addresses which will leave the client computer attempting to connect to the DC using the wrong address.
 
 You can look for the NIC here: **VirtualMachines>[your DC name here]>Settings>Networking** "Network Interface: [Your NIC highlighted in blue here]"
 
@@ -35,7 +35,7 @@ Clicking on it will take you to the NIC overview. Under **Settings>IP Configurat
 
 ![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/13.png)
 
-Now we will use RDP to access our DC VM. If you are using Windows, just look up RDP in your computer; since I was using Linux I had to install XRDC as a RDP alternative. Both work the same, just type the Public IP Address of the DC (**VirtualMachines>[your DC name here]>Overview>Essentials**) and connect. 
+Now we will use RDP to access our DC VM. If you are using Windows, just look up RDP in your computer. Since I was using Linux I had to install XRDC as a RDP alternative. Both work the same; just type the Public IP Address of the DC (**VirtualMachines>[your DC name here]>Overview>Essentials**) and click connect. 
 
 ![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/four.png)
 
@@ -45,21 +45,19 @@ Usually, Server Manager will open on start-up. In case it doesnt, you can easily
 
 ![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/five.png)
 
-You can ignore most of the set up and click "next" until you reach the "Server Roles" section. In here you will select "Active Directory Domain Services" and "Install" before continuing until you are finished with the software wizard.
+You can ignore most of the set up and click "next" until you reach the "Server Roles" section. In here you will select "Active Directory Domain Services" and "Install" before navigating the rest of the software wizard.
 
 ![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/seven.png)
 
-Once you come back, you will see a flag at the top. Clicking it will open a pop-up. Clicking "promote this server to a domain controller" will open another software wizard.
+Once you finish, you will be back in the Server Manager and a flag will be visible at the top. Clicking it will open a pop-up. Clicking "promote this server to a domain controller" will open another software wizard.
 
 ![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/eight.png)
 
-Since we are making a brand new domain we will select the "Add a new forest" option and provide a root domain name below. Beware that the name needs to use a fully qualified domain name (domain.com; domain.net; domain.org; etc.) **Don't forget your domain name, write it down if you have to.**
+Since we are making a brand new domain we will select the "Add a new forest" option and provide a root domain name below. Beware that the name needs to use a fully qualified domain name (domain.com; domain.net; domain.org; etc.)
 
 ![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/nine.png)
 
-At this point you can ignore everything else in the software wizard (just provide a password for DSRM). Once you get to the end and start installing, you might loose connection to the VM as it restarts (or prompts you to restart) in order for the changes to take effect. A RDP back into the VM **might** require using the domain admin username  (DomainName.com\Original_VMs_Username or Original_VMs_Username@DomainName.com) instead of the original VM's username. The next section will have screenshot examples of this.
-
-![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/ten.png)
+At this point you can ignore everything else in the software wizard (just provide a password for DSRM when prompted). Once you get to the end and start installing, you might loose connection to the VM as it restarts (or prompts you to restart) so that the changes may take effect. A RDP back into the VM **might** require using the domain admin username  ("DomainName.com\Original_VMs_Username" or "Original_VMs_Username@DomainName.com") instead of the original VM's username.
 
 ## Active Directory Configuration
  
@@ -73,44 +71,49 @@ Just like that, we should have Active Directory installed. Now what is left is t
  
 ### 1. Account/User Creation Process
 
+To make an account we go to "Active Directory Users and Computers", you can find this under "Window Administration Tools" in the start menue.
+
 ![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/Screenshot_20230311_164859.png)
+
+When we select our domain we are able to create a new user using the tool bar above. Before that, its best practice to create a new Organizational Unit to keep users organized based on their role. We are simulating a school enviroment in our example so we will create a Organizational Unit called _admins and another called _students.
+
+![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/ten.png)
+
+![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/Screenshot_20230311_175702.png)
+
+Under _admins we will create a user which will act as our admin (the "a-" stands for admin). Enter the required information and take note of the user's logon name and password. We will need this information later. 
 
 ![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/11.png)
 
-![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/Screenshot_20230311_175702.png)
-Add user (preferably under a new file thingy)
-
+Unfortunately, simply labeling a user admin will not give that user admin priviledges. To give it admin powers we must right-click on the user and open "Properties". Then we must "add" the user to another group. Insert "domain admins" in the text prompt and then click "Check Names". The text we inserted should turn into "<u>Domain Admins</u>". When we select this new text and click "Ok", we should see that our user is now in another group named "Domain Admins" automatically.
 
 ![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/12.png)
-make user into admin
 
-
-we make another user named joe under student thingy
+Finally, we will create a non-admin user under a non-admin organizational unit which we will use to check our work at the end. Take note of this user's credentials as well. We don't need to do anything extra with this user, since this user should already be under our "Domain Users" group
 
 ![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/20.png)
  
  ### 2. DNS Set-up
  
-Remember how to get to the NIC? Well this time we will go to the Client's NIC. Under **Settings>DNS Server** we will select "Custom" and insert our DC's "NIC Private IP" found under **Virtual Machines>[your DC name here]>Networking
+Remember how to get to the NIC? Well this time we will go to the Client's NIC. Under **Settings>DNS Server** we will select "Custom" and insert our DC's "NIC Private IP" found under **Virtual Machines>[your DC name here]>Networking**
 
 ![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/15.png)
- 
+
+After you click "save", you are done. It's that simple.
+
  ### 3. Adding Client Computers to Domain
  
-Lastly, we will RDP into our Client VM using the credentials used during creation. Then we will go to **settings>System>About>
+Lastly, we will RDP into our Client VM using the credentials used during our VM creation. Then we will go to **settings>System>About>Rename this PC (advanced)** Then we will click "Change..."
 
-Under "Member of" select "Domain" and enter your domain's name. It will ask you to login, for which the credentials will be for any admin account (the one we made under 1. Account/User Creation Process).
+![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/Screenshot_20230311_173905.png)
+
+Under "Member of" select "Domain" and enter your domain's name. It will ask you to login, this is where we will logon as our admin user(the one we made under 1. Account/User Creation Process). Logging in as a domain admin will autmatically add our Client VM into our domain.
 
 ![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/19.png)
 
 If you are successfull you will be greeted with this:
 
 ![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/16.png)
-
-add stuff about allowing all users to RDP
-and the following is shown
-
-![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/Screenshot_20230311_173905.png)
 
 ![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/21.png)
 
