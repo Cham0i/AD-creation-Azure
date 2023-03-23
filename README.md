@@ -159,4 +159,4 @@ Moment of truth; if we did everything correctly we should be able to RDP into ou
 
 ![alt text](https://github.com/Cham0i/AD-creation-Azure/blob/main/screen/23.png)
 
-Enjoy your brand new Active Directory Domain Service simulated enviroment!
+Now that you have everything working, you can start using this environment to do things such as [routing domain names to IP Addresses in your DC's DNS settings](https://github.com/Cham0i/Understanding-DNS) or [using security groups to share files within Active Directory](https://github.com/Cham0i/AD-File-Sharing)
